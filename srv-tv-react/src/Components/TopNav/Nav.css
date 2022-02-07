@@ -1,0 +1,19 @@
+.nav-link{
+    color: red !important;
+}
+.nav{
+    height: 60px;
+    background-color: navy;
+    align-items: flex-end;
+    justify-content: end;
+    font-weight: 500;
+    padding-right: 2%;
+}
+
+.logo{
+    position: absolute;
+    left: 15px;
+    color: #fff;
+    list-style: none;
+    text-decoration: none;
+}

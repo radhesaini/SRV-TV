@@ -1,0 +1,44 @@
+.App1 {
+    border: 2px solid #d3d3d3;
+    border-radius: .5em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 50px;
+    padding: 1em;
+    text-align: left;
+    background: #000;
+    color: #fff;
+  }
+  
+  .form {
+    padding: 1em;
+  }
+  
+  label {
+    font-weight: 600;
+  }
+
+  .inline-input{
+    display: flex;
+    gap: 10%;
+  }
+
+  .signin-btn{
+    justify-content: end;
+    display: flex;
+  }
+
+  .right-div{
+    margin-left: auto;
+    width: 45%;
+  }
+
+  .left-div{
+      width: 45%;
+  }
+
+  p{
+    color: red;
+    text-align: center;
+  }
