@@ -28,7 +28,7 @@ function Navigation() {
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={Link} to='/login' eventKey="link-3" onClick={()=>{ localStorage.clear(); this.props.navigate(`/login`);}}>
+          <Nav.Link as={Link} to='/login' eventKey="link-3" onClick={()=>{ localStorage.clear();}}>
             Logout
           </Nav.Link>
         </Nav.Item>

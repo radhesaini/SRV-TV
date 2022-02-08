@@ -1,54 +1,55 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Table} from 'reactstrap';
 import { Button } from 'reactstrap';
-import ChannelServices from '../../Helper/Api';
+import {getAll} from '../../Helper/Api';
 import  ModalForm from './Modal';
 
-const Admin = () => {
-  const [state,setState] = React.useState({
-    arr:[]})
-  const updateState = (item) => {
-    const itemIndex = this.state.items.findIndex(data => data.id === item.id)
+class Admin extends Component {
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       arr: [],
+       user: JSON.parse(localStorage.getItem('user')).email,
+    }
+
+    this.getItems = this.getItems.bind(this);
+  }
+  
+  updateState = (item) => {
+    const itemIndex = this.state.arr.findIndex(data => data.id === item.id)
     const newArray = [
     // destructure all items from beginning to the indexed item
-      ...this.state.items.slice(0, itemIndex),
+      ...this.state.arr.slice(0, itemIndex),
     // add the updated item to the array
       item,
     // add the rest of the items to the array from the index after the replaced item
-      ...this.state.items.slice(itemIndex + 1)
+      ...this.state.arr.slice(itemIndex + 1)
     ]
-    this.setState({ items: newArray })
+    this.setState({ arr: newArray })
   }
 
-  const addItemToState = (item) => {
+  addItemToState = (item) => {
     this.setState(prevState => ({
-      items: [...prevState.items, item]
+      arr: [...prevState.arr, item]
     }))
   }
 
-  const handleClick = (value) => {
-    var arr = [];
-   arr =  state.arr.filter(
-      (item,index)=>{
-          if(index === value){
-            item.Status = "subscribe"
-            item.disbale = true
-          }
-          return item
-        }
-    )
-    setState({arr:arr})
-  }
-
-  const getItems = () => {
-    ChannelServices.getAll(JSON.parse(localStorage.getItem('user')).email)
-    .then(items => this.setState({items}))
+  getAllItems = () => {
+    getAll(this.state.email)
+    .then(response => this.setState({arr: response.data}))
       .catch(err => console.log(err))
+    return null;
   }
 
-  getItems();
-
-  return <div className='container mt-5 pt-5'>
+  componentDidMount(){
+    if(this.state.arr.length==0){
+      this.getAllItems();
+    }
+    
+  }
+render(){
+   return <div className='container mt-5 pt-5'>
       <Table>
         <thead>
           <tr>
@@ -64,20 +65,22 @@ const Admin = () => {
         </thead>
         <tbody>
           {
-            state.arr && state.arr.map((item,index)=>{
+            this.state.arr && this.state.arr.map((item,index)=>{
               return(<tr scope="row" key={index}><th >{index+1}</th> <td>{item.channel_name} </td>
               <td>{item.owner} </td>
+              <td>{item.price} </td>
               <td>{item.paused_on} </td>
               <td>{item.subcribed_on} </td>        
                 <td> <Button color="success" disabled={item.disbale}>{item.status}</Button></td >
-                <th> <ModalForm buttonLabel="Edit" item={item} updateState={updateState} addItemToState={addItemToState}/> </th> </tr>)
+                <th> <ModalForm buttonLabel="Edit" item={item} updateState={this.updateState} addItemToState={this.addItemToState}/> </th> </tr>)
             })
           }
  
         </tbody>
       </Table>
-      <ModalForm buttonLabel="Add Item" addItemToState={addItemToState}/>
-  </div>;
-};
+      <ModalForm buttonLabel="Add Item" addItemToState={this.addItemToState}/>
+  </div>};
+}
+
 
 export default Admin;

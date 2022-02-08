@@ -1,4 +1,5 @@
 from os import access
+import json
 import subprocess
 from flask import Flask, request, jsonify, Response, abort
 from datetime import datetime
@@ -75,14 +76,20 @@ def login():
         status=400,
         )
 
-@app.route('/channels/fetch/<email>', methods=['GET'])
+@app.route('/channels/fetch/<email>', methods=[ 'GET' ])
 def get_channels(email):
     try:
         res = Subscribe.query.filter_by(email = email).all()
         result = []
         for item in res:
-            result.add({c.name: getattr(res, c.name) for c in res.__table__.columns})
-        return  jsonify(result)
+            d = {}
+            for c,v in item.__dict__.items():
+                if c != '_sa_instance_state' and type(v)==type(datetime.now()):
+                    d[c] = v.strftime("%m/%d/%Y")
+                elif c != '_sa_instance_state':
+                    d[c] = v
+            result.append(d)
+        return  json.dumps(result)
     except exc.SQLAlchemyError as e:
          return Response(
         "database connectivity error",
@@ -91,7 +98,7 @@ def get_channels(email):
     except BaseException as e:
         print(e)
         return Response(
-        "Invalid User email or password",
+        "No record Found",
         status=404,
         )
     except:
@@ -119,7 +126,7 @@ def get_channel(channel_id):
         )
     except BaseException as e:
         return Response(
-        "Invalid User email or password",
+        "No record Found",
         status=404,
         )
     except:
@@ -139,7 +146,7 @@ def update_channels(channel_id):
             return {'data': request.get_json()} 
         else:
             return Response(
-        "Invalid User email or password",
+        "No record Found",
         status=404,
         )
     except exc.SQLAlchemyError as e:
@@ -149,7 +156,7 @@ def update_channels(channel_id):
         )
     except BaseException as e:
         return Response(
-        "Invalid User email or password",
+        "Invalid Id",
         status=404,
         )
     except:

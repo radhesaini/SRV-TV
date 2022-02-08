@@ -1,5 +1,3 @@
-from re import U
-from tkinter import NO
 from flask import Flask
 # from app import db
 from sqlalchemy import Column, Integer, String, DateTime, inspection
@@ -22,9 +20,10 @@ DB_DNAME = os.getenv("DATABASE")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://'+ DB_USER + ':' + DB_PASSWD + '@' + DB_HOST + '/' + DB_DNAME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-migrate = Migrate(app, Base)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
     email = Column(String(255), unique=True, nullable=False, primary_key=True)
     first_name = Column(String(30), nullable=False)
@@ -51,7 +50,7 @@ class User(Base):
     def toDict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns  if c.name !='password'}
 
-class Subscribe(Base):
+class Subscribe(db.Model):
     __tablename__ = 'channels'
     channel_id = Column(Integer(), unique=True, nullable=False, primary_key=True)
     email = Column(String(255), nullable=False)
@@ -75,4 +74,4 @@ class Subscribe(Base):
         return [{c.name: getattr(self, c.name)} for c in self.__table__.columns ]
 
     def toDict(self):
-        return {c.name: eval(getattr(self, c.name)) for c in self.__table__.columns}
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

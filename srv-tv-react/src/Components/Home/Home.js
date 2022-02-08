@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Table} from 'reactstrap';
 import { Button } from 'reactstrap';
-import ChannelServices from '../../Helper/Api';
+import {getAll} from '../../Helper/Api';
 
 export default class home extends Component {
   constructor(props) {
@@ -9,20 +9,21 @@ export default class home extends Component {
   
     this.state = {
        channels: '',
-       error: ''
+       error: '',
+       email: JSON.parse(localStorage.getItem('user')).email
     }
   }
   
  
   componentDidMount(){
-    const user = JSON.parse(localStorage.getItem('user'))
-      ChannelServices.get(user.email).then((response)=>{
+      getAll(this.state.email)
+      .then((response)=>{
           this.setState({channels: response.data});        
       }).catch((error)=>{
         this.setState({error: error.response.data})
-      }
-      )    
+      })    
   }
+  
   render() {
     return <div className='container mt-5 pt-5'>
        <p style={{color: 'red', textAlign: 'center'}}>{this.state.error}</p>

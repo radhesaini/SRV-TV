@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-const axios_ = axios.create({
+export const axios_ = axios.create({
   baseURL: 'http://localhost:8000',
   headers: { 'Content-Type': 'application/json' },
 })
+
 export const register = async newUser => {
   return await axios_
     .post('/users/register', {
@@ -22,8 +23,8 @@ export const login = async user => {
 return response.data})
 }
 
-const getAll = (email) => {
-  return axios_.get(`/channels/fetch/${email}`);
+export const getAll = async (email) => {
+  return await axios_.get(`/channels/fetch/${email}`);
 };
 const get = (id) => {
   return axios_.get(`/channels/fetch_one/${id}`);
