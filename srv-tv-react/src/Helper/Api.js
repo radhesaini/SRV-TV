@@ -17,7 +17,34 @@ export const login = async user => {
       email: user.email,
       password: user.password
     }).then(response=>{
-  localStorage.setItem('user_token', response.user_token)
-  localStorage.setItem( 'user', response.data)
+  localStorage.setItem('user_token', response.data.user_token)
+  localStorage.setItem( 'user', JSON.stringify(response.data.data))
 return response.data})
 }
+
+const getAll = (email) => {
+  return axios_.get(`/channels/fetch/${email}`);
+};
+const get = (id) => {
+  return axios_.get(`/channels/fetch_one/${id}`);
+};
+const create = (data) => {
+  return axios_.post(`/channels/create`, data);
+};
+const update = (id, data) => {
+  return axios_.put(`/channels/update/${id}`, data);
+};
+const remove = (id) => {
+  return axios_.delete(`/channels/${id}`);
+};
+
+
+const ChannelServices = {
+  getAll,
+  get,
+  create,
+  update,
+  remove,
+};
+
+export default ChannelServices;

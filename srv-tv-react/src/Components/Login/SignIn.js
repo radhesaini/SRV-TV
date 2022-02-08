@@ -61,8 +61,7 @@ class SignIn extends Component {
     console.log(user);
     login(user).then(res => {
       if (!res.error) {
-        this.props.navigate(`/dashbord`);
-        console.log(`Email: ${res.data.email}`);
+        this.props.navigate(`/home`);
       }
       else{
         console.error(res.error);
