@@ -26,6 +26,11 @@ return response.data})
 export const getAll = async (email) => {
   return await axios_.get(`/channels/fetch/${email}`);
 };
+
+export const getAllSub = async (email) => {
+  return await axios_.get(`/channels/fetch_sub/${email}`);
+};
+
 const get = (id) => {
   return axios_.get(`/channels/fetch_one/${id}`);
 };
@@ -33,6 +38,7 @@ const create = (data) => {
   return axios_.post(`/channels/create`, data);
 };
 const update = (id, data) => {
+  console.log("=======>", id)
   return axios_.put(`/channels/update/${id}`, data);
 };
 const remove = (id) => {

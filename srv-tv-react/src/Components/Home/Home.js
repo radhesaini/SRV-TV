@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Table} from 'reactstrap';
 import { Button } from 'reactstrap';
-import {getAll} from '../../Helper/Api';
+import {getAll, getAllSub} from '../../Helper/Api';
 
 export default class home extends Component {
   constructor(props) {
@@ -16,14 +16,14 @@ export default class home extends Component {
   
  
   componentDidMount(){
-      getAll(this.state.email)
+      getAllSub(this.state.email)
       .then((response)=>{
-          this.setState({channels: response.data});        
+          this.setState({channels: response.data.data});        
       }).catch((error)=>{
         this.setState({error: error.response.data})
       })    
   }
-  
+
   render() {
     return <div className='container mt-5 pt-5'>
        <p style={{color: 'red', textAlign: 'center'}}>{this.state.error}</p>
@@ -36,8 +36,6 @@ export default class home extends Component {
             <th>Channel Price</th>
             <th>Last Paused Date</th>
             <th>subscrition Date</th>
-            <th>Status</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -48,7 +46,6 @@ export default class home extends Component {
               <td>{item.price} </td>
               <td>{item.paused_on} </td>
               <td>{item.subcribed_on} </td>        
-                <td> <Button color="success" disabled={item.disbale}>{item.status}</Button></td >
                </tr>)
             })
           }

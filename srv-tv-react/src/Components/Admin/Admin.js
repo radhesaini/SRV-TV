@@ -10,10 +10,9 @@ class Admin extends Component {
   
     this.state = {
        arr: [],
-       user: JSON.parse(localStorage.getItem('user')).email,
+       email: JSON.parse(localStorage.getItem('user')).email,
     }
 
-    this.getItems = this.getItems.bind(this);
   }
   
   updateState = (item) => {
@@ -35,18 +34,13 @@ class Admin extends Component {
     }))
   }
 
-  getAllItems = () => {
-    getAll(this.state.email)
-    .then(response => this.setState({arr: response.data}))
-      .catch(err => console.log(err))
-    return null;
-  }
-
   componentDidMount(){
-    if(this.state.arr.length==0){
-      this.getAllItems();
-    }
-    
+    getAll(this.state.email)
+    .then((response)=>{
+        this.setState({arr: response.data});        
+    }).catch((error)=>{
+      this.setState({error: error.response.data})
+    })   
   }
 render(){
    return <div className='container mt-5 pt-5'>

@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
 function Profile(){
-  const [userData, setUserData] = useState('');
+  const [userData, setUserData] = useState(JSON.parse(localStorage.getItem('user')));
   
-  useEffect(()=>{
-     setUserData(JSON.parse(localStorage.getItem('user')))
-  },[userData]);
   
   return <div className='container mt-5'>
     <h1>Profile</h1>

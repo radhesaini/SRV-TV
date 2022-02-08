@@ -1,8 +1,8 @@
 """creates_table
 
-Revision ID: 2ca08f288d9f
+Revision ID: 8d412fa81521
 Revises: 
-Create Date: 2022-02-08 21:27:00.153374
+Create Date: 2022-02-09 03:08:52.098557
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2ca08f288d9f'
+revision = '8d412fa81521'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,8 +25,8 @@ def upgrade():
     sa.Column('owner', sa.String(length=30), nullable=False),
     sa.Column('price', sa.Integer(), nullable=False),
     sa.Column('paused_on', sa.DateTime(), nullable=True),
-    sa.Column('status', sa.String(length=30), nullable=False),
-    sa.Column('subcribed_on', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
+    sa.Column('status', sa.String(length=30), nullable=True),
+    sa.Column('subcribed_on', sa.DateTime(), nullable=True),
     sa.Column('unsubscribed_on', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('channel_id'),
     sa.UniqueConstraint('channel_id')

@@ -1,5 +1,4 @@
 import React from 'react';
-import Select from 'react-select';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import ChannelServices from '../../Helper/Api';
 
@@ -9,24 +8,20 @@ class AddEditForm extends React.Component {
     channel_id: '', 
     channel_name: '',
     owner: '',
-    status: '',
     price: ''
   }
 
   onChange = e => {
     this.setState({[e.target.name]: e.target.value})
   }
-  
-  onChange = e => {
-    this.setState({[e.target.name]: e.target.value[0]})
-  }
 
   submitFormAdd = e => {
     e.preventDefault()
     ChannelServices.create(this.state)   
       .then(item => {
-        if(Array.isArray(item)) {
-          this.props.addItemToState(item[item.length-1])
+        if(item.data) {
+          console.log(item.data.data)
+          this.props.addItemToState(item.data.data)
           this.props.toggle()
         } else {
           console.log('failure')
@@ -37,7 +32,8 @@ class AddEditForm extends React.Component {
 
   submitFormEdit = e => {
     e.preventDefault()
-    ChannelServices.update({
+    ChannelServices.update(this.state.channel_id, 
+      {
         channel_id: this.state.channel_id, 
         channel_name: this.state.channel_name,
         owner: this.state.owner,
@@ -45,9 +41,9 @@ class AddEditForm extends React.Component {
         price: this.state.price
       })
       .then(item => {
-        if(Array.isArray(item)) {
-          // console.log(item[0])
-          this.props.updateState(item[item.length-1])
+        if(item.data) {
+          console.log(item.data.data)
+          this.props.addItemToState(item.data.data)
           this.props.toggle()
         } else {
           console.log('failure')
@@ -79,7 +75,7 @@ class AddEditForm extends React.Component {
         </FormGroup>
         <FormGroup>
           <Label for="channel_id">Channel Id</Label>
-          <Input type="text" name="channel_id" id="last" onChange={this.onChange} value={this.state.channel_id === null ? '' : this.state.channel_id}  />
+          <Input type="text" name="channel_id" id="last" onChange={this.onChange} value={this.state.channel_id === null ? '' : this.state.channel_id}  disabled={this.props.item?true:false}/>
         </FormGroup>
         <FormGroup>
           <Label for="owner">Channel Owner</Label>
@@ -91,7 +87,11 @@ class AddEditForm extends React.Component {
         </FormGroup>
         <FormGroup>
           <Label for="status">Channel Status</Label>
-          <Select name="status" options={options} onChangeSlect={this.onChange} ></Select>
+          <Input type="select" name="status" id="exampleSelect"  onChange={this.onChange}>
+            <option value="subcribed" >Subcribed</option>
+            <option selected value="unsubcribed" >Unsubcribed</option>
+            <option value="paused">Paused</option>
+          </Input>
         </FormGroup>
         <Button>Submit</Button>
       </Form>

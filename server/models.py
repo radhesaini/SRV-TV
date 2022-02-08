@@ -57,18 +57,21 @@ class Subscribe(db.Model):
     channel_name = Column(String(30), nullable=False)
     owner = Column(String(30), nullable=False)
     price =  Column(Integer(), nullable=False)
-    paused_on = Column(DateTime, nullable=True, onupdate=func.now())
-    status = Column(String(30), nullable=False)
-    subcribed_on = Column(DateTime, server_default=func.now())
+    paused_on = Column(DateTime, nullable=True ,server_default=None)
+    status = Column(String(30), nullable=True ,server_default=None)
+    subcribed_on = Column(DateTime, nullable=True ,server_default=None)
     unsubscribed_on = Column(DateTime, onupdate=func.now(), server_default=None, nullable=True)
 
-    def __init__(self, channel_id, email, channel_name, owner, status, price):
+    def __init__(self, channel_id, email, channel_name, owner, price):
         self.channel_id = channel_id
         self.email = email
         self.channel_name = channel_name
         self.owner = owner
-        self.status = status
+        self.status = None
         self.price = price
+        self.paused_on = None
+        self.subcribed_on = None
+        self.unsubscribed_on = None
 
     def toList(self):
         return [{c.name: getattr(self, c.name)} for c in self.__table__.columns ]
