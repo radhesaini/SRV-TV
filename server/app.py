@@ -111,14 +111,13 @@ def get_channels(email):
 @app.route('/channels/fetch_sub/<email>', methods=[ 'GET', 'POST' ])
 def get_subcribe_channels(email):
     try:
-        res = Subscribe.query.filter(email = email, status='subscribe')
+        res = Subscribe.query.filter_by(email=email, status="subcribed").all()
+        # Search.query.filter_by(user_input=query, location = location).first()
         result = []
         for item in res:
             d = {}
             for c,v in item.__dict__.items():
-                if c != '_sa_instance_state' and type(v)==type(datetime.now()):
-                    d[c] = v.strftime("%m/%d/%Y")
-                elif c != '_sa_instance_state':
+                if c != '_sa_instance_state':
                     d[c] = v
             result.append(d)
         return  json.dumps(result)
@@ -227,6 +226,48 @@ def create_channels():
         status=400,
     )
     return {'data' : u.toDict()}
+
+@app.route('/channels/calculate_bill/<email>', methods=['GET'])
+def channels_bill(email):
+    try:
+        res = Subscribe.query.filter_by(email=email, status="subcribed").all()
+        # Search.query.filter_by(user_input=query, location = location).first()
+        amount = 0
+        for item in res:
+            item = item.__dict__
+            today = datetime.date.today()
+            date_format = "%m/%d/%Y"
+            print("kkkkkkkkkk",amount)
+            a = datetime.strptime(item.subcribed_on , date_format)
+            print("kkkkkkkkkk",amount)
+            if item.paused_on:
+                print("kkkkkkkkkk",amount)
+                b  = datetime.strptime(item.paused_on, date_format)
+            else:
+                print("kkkkkkkkkk",amount)
+                b  = datetime.strptime(today, date_format)
+            days = b - a
+            print("kkkkkkkkkk",amount)
+            amount += days*item.price
+        print("kkkkkkkkkk",amount)
+        return  {'result': amount}
+    except exc.SQLAlchemyError as e:
+         return Response(
+        "database connectivity error",
+        status=502,
+        )
+    except BaseException as e:
+        print("------------=",e)
+        return Response(
+        "No record Found",
+        status=404,
+        )
+    except:
+        return Response(
+        "Your credentials are not matched",
+        status=400,
+        )
+
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
 

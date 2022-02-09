@@ -16,16 +16,10 @@ class Admin extends Component {
   }
   
   updateState = (item) => {
-    const itemIndex = this.state.arr.findIndex(data => data.id === item.id)
-    const newArray = [
-    // destructure all items from beginning to the indexed item
-      ...this.state.arr.slice(0, itemIndex),
-    // add the updated item to the array
-      item,
-    // add the rest of the items to the array from the index after the replaced item
-      ...this.state.arr.slice(itemIndex + 1)
-    ]
-    this.setState({ arr: newArray })
+    const itemIndex = this.state.arr.findIndex(data => data.channel_id === item.channel_id)
+    var {arr} = this.state
+    arr = [ ...arr.slice(0, itemIndex), item, ...arr.slice(itemIndex+1)]
+    this.setState({ arr })
   }
 
   addItemToState = (item) => {
@@ -63,8 +57,8 @@ render(){
               return(<tr scope="row" key={index}><th >{index+1}</th> <td>{item.channel_name} </td>
               <td>{item.owner} </td>
               <td>{item.price} </td>
-              <td>{item.paused_on} </td>
-              <td>{item.subcribed_on} </td>        
+              <td>{Date(item.paused_on).toString().substring(4,15)} </td>
+              <td>{Date(item.subcribed_on).toString().substring(4, 15)}</td>        
                 <td> <Button color="success" disabled={item.disbale}>{item.status}</Button></td >
                 <th> <ModalForm buttonLabel="Edit" item={item} updateState={this.updateState} addItemToState={this.addItemToState}/> </th> </tr>)
             })

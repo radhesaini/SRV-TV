@@ -43,7 +43,7 @@ class AddEditForm extends React.Component {
       .then(item => {
         if(item.data) {
           console.log(item.data.data)
-          this.props.addItemToState(item.data.data)
+          this.props.updateState(item.data.data)
           this.props.toggle()
         } else {
           console.log('failure')
@@ -68,7 +68,7 @@ class AddEditForm extends React.Component {
         { value: 'paused', label: 'Paused' }
       ]
     return (
-      <Form onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}>
+      <Form onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd }>
         <FormGroup>
           <Label for="channel_name">Channel Name</Label>
           <Input type="text" name="channel_name" id="first" onChange={this.onChange} value={this.state.channel_name === null ? '' : this.state.channel_name} />
@@ -88,8 +88,9 @@ class AddEditForm extends React.Component {
         <FormGroup>
           <Label for="status">Channel Status</Label>
           <Input type="select" name="status" id="exampleSelect"  onChange={this.onChange}>
+          <option selected value="" >Select Option</option>
             <option value="subcribed" >Subcribed</option>
-            <option selected value="unsubcribed" >Unsubcribed</option>
+            <option value="unsubcribed" >Unsubcribed</option>
             <option value="paused">Paused</option>
           </Input>
         </FormGroup>

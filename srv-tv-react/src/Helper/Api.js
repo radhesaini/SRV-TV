@@ -31,6 +31,10 @@ export const getAllSub = async (email) => {
   return await axios_.get(`/channels/fetch_sub/${email}`);
 };
 
+export const getBill = async (email) => {
+  return await axios_.get(`/channels/calculate_bill/${email}`);
+};
+
 const get = (id) => {
   return axios_.get(`/channels/fetch_one/${id}`);
 };

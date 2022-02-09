@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Table} from 'reactstrap';
 import { Button } from 'reactstrap';
-import {getAll, getAllSub} from '../../Helper/Api';
+import {getAll, getAllSub, getBill} from '../../Helper/Api';
 
 export default class home extends Component {
   constructor(props) {
@@ -10,15 +10,24 @@ export default class home extends Component {
     this.state = {
        channels: '',
        error: '',
-       email: JSON.parse(localStorage.getItem('user')).email
+       email: JSON.parse(localStorage.getItem('user')).email,
+       bill_aount: ''
     }
+  }
+
+  billCalculate = () =>{
+    getBill(this.state.email)
+    .then((response)=>{
+      this.setState({bill_amount: response.data.result})
+    })
+    .catch(error=>this.setState({error: error.reponse.data}))
   }
   
  
   componentDidMount(){
       getAllSub(this.state.email)
       .then((response)=>{
-          this.setState({channels: response.data.data});        
+          this.setState({channels: response.data});        
       }).catch((error)=>{
         this.setState({error: error.response.data})
       })    
@@ -44,15 +53,15 @@ export default class home extends Component {
               return (<tr scope="row" key={index}><th >{index+1}</th> <td>{item.channel_name} </td>
               <td>{item.owner} </td>
               <td>{item.price} </td>
-              <td>{item.paused_on} </td>
-              <td>{item.subcribed_on} </td>        
+            <td>{Date(item.paused_on).toString().substring(4,15)} </td>
+              <td>{Date(item.subcribed_on).toString().substring(4, 15)}</td>    
                </tr>)
             })
           }
 
         </tbody>
       </Table>
-
+        <Button onClick={()=>this.billCalculate}>calculate bill</Button>
     </div>;
   }
 }

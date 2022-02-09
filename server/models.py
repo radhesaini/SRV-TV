@@ -57,10 +57,10 @@ class Subscribe(db.Model):
     channel_name = Column(String(30), nullable=False)
     owner = Column(String(30), nullable=False)
     price =  Column(Integer(), nullable=False)
-    paused_on = Column(DateTime, nullable=True ,server_default=None)
+    paused_on = Column(String(30), nullable=True ,server_default=None)
     status = Column(String(30), nullable=True ,server_default=None)
-    subcribed_on = Column(DateTime, nullable=True ,server_default=None)
-    unsubscribed_on = Column(DateTime, onupdate=func.now(), server_default=None, nullable=True)
+    subcribed_on = Column(String(30), nullable=True ,server_default=None)
+    unsubscribed_on = Column(String(30), server_default=None, nullable=True)
 
     def __init__(self, channel_id, email, channel_name, owner, price):
         self.channel_id = channel_id
