@@ -227,29 +227,22 @@ def create_channels():
     )
     return {'data' : u.toDict()}
 
-@app.route('/channels/calculate_bill/<email>', methods=['GET'])
+@app.route('/channels/calculate_bill/<email>', methods=['GET', 'POST'])
 def channels_bill(email):
     try:
         res = Subscribe.query.filter_by(email=email, status="subcribed").all()
         # Search.query.filter_by(user_input=query, location = location).first()
         amount = 0
         for item in res:
-            item = item.__dict__
-            today = datetime.date.today()
+            today = datetime.today()
             date_format = "%m/%d/%Y"
-            print("kkkkkkkkkk",amount)
-            a = datetime.strptime(item.subcribed_on , date_format)
-            print("kkkkkkkkkk",amount)
+            a = datetime.fromtimestamp(float(item.subcribed_on))
             if item.paused_on:
-                print("kkkkkkkkkk",amount)
-                b  = datetime.strptime(item.paused_on, date_format)
+                b  = datetime.fromtimestamp(float(item.paused_on))
             else:
-                print("kkkkkkkkkk",amount)
                 b  = datetime.strptime(today, date_format)
-            days = b - a
-            print("kkkkkkkkkk",amount)
-            amount += days*item.price
-        print("kkkkkkkkkk",amount)
+            days = a - b
+            amount += (days.days+1)*item.price
         return  {'result': amount}
     except exc.SQLAlchemyError as e:
          return Response(

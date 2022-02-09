@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Table} from 'reactstrap';
+import {ButtonGroup, Table} from 'reactstrap';
 import { Button } from 'reactstrap';
 import {getAll, getAllSub, getBill} from '../../Helper/Api';
 
@@ -11,14 +11,16 @@ export default class home extends Component {
        channels: '',
        error: '',
        email: JSON.parse(localStorage.getItem('user')).email,
-       bill_aount: ''
+       bill_amount: ''
     }
   }
 
-  billCalculate = () =>{
+  billCalculate = () => {
+    console.log("clicked")    
     getBill(this.state.email)
     .then((response)=>{
-      this.setState({bill_amount: response.data.result})
+      console.log(response);
+      this.setState({bill_amount: response.data.result});
     })
     .catch(error=>this.setState({error: error.reponse.data}))
   }
@@ -61,7 +63,14 @@ export default class home extends Component {
 
         </tbody>
       </Table>
-        <Button onClick={()=>this.billCalculate}>calculate bill</Button>
+      {this.state.bill_amount && <p>   bill amount: {this.state.bill_amount}</p>}
+      <ButtonGroup>
+      <Button type='submit' onClick={this.billCalculate} onChange={()=>this.billCalculate}>calculate bill</Button>
+      
+      </ButtonGroup>
+     
+      
+      
     </div>;
   }
 }

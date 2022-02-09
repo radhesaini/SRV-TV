@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Table} from 'reactstrap';
 import { Button } from 'reactstrap';
-import {getAll} from '../../Helper/Api';
+import {getAll, getBill} from '../../Helper/Api';
 import  ModalForm from './Modal';
 
 class Admin extends Component {
@@ -67,6 +67,8 @@ render(){
         </tbody>
       </Table>
       <ModalForm buttonLabel="Add Item" addItemToState={this.addItemToState}/>
+     
+      
   </div>};
 }
 
